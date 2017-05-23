@@ -37,6 +37,11 @@ def _run_task(task_context, rdd, func, partition):
     """
     task_context.attempt_number += 1
 
+    log.debug('Running stage {} for partition {} of {}.'
+              ''.format(task_context.stage_id,
+                        task_context.partition_id,
+                        rdd.name()))
+
     try:
         return func(task_context, rdd.compute(partition, task_context))
     except Exception:
@@ -116,7 +121,6 @@ class Context(object):
     :param data_deserializer: Deserializer for the data.
     :param int max_retries: maximum number a partition is retried
     :param float retry_wait: seconds to wait between retries
-
     """
 
     __last_rdd_id = 0
